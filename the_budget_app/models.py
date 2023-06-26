@@ -63,7 +63,7 @@ class Category(models.Model):
         return Category.objects.filter(category_type='expense')
 
     def incomes():
-        return Category.objects.filter(category_type='expense', editable=True)
+        return Category.objects.filter(category_type='income', editable=True)
 
     def save(self, *args, **kwargs):
         # Get the original data of the object's editable.
