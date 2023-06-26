@@ -214,3 +214,23 @@ class BudgetForm(forms.Form):
     )
 
     budget_limit.widget.attrs.update({'class': 'form-control'})
+
+
+class CategoryForm(forms.Form):
+    CATEGORY_TYPE = (
+        ('income', 'Income'),
+        ('expense', 'Expense'),
+    )
+    category_type = forms.ChoiceField(
+        widget=forms.RadioSelect,
+        label='Category Type',
+        label_suffix='',
+        choices=CATEGORY_TYPE,
+    )
+    category_name = forms.CharField(
+        label='Category Name',
+        label_suffix='',
+        max_length=30,
+    )
+
+    category_name.widget.attrs.update({'class': 'form-control'})
