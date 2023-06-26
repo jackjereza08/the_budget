@@ -1,0 +1,45 @@
+{% extends '../base.html' %}
+
+{% block content %}
+
+<div class="container-lg mt-4 mb-4">
+    <h1 class="text-center mb-4">Categories</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow border-0 w-75 m-auto">
+                <div class="card-header">
+                    <h2 class="card-title text-center">Income</h2>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for income in incomes %}
+                        <li class="list-group-item">{{ income.category_name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="card-footer d-flex justify-content-center">
+                    <a href="#" class="btn btn-outline-primary">Add new Income</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow border-0 w-75 m-auto">
+                <div class="card-header">
+                    <h2 class="card-title text-center">Expense</h2>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for expense in expenses %}
+                        <li class="list-group-item">{{ expense.category_name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="card-footer d-flex justify-content-center">
+                    <a href="#" class="btn btn-outline-primary">Add new Expense</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
