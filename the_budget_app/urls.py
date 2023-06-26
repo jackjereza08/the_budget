@@ -6,6 +6,7 @@ from .views import (
     new_record_view as new_record,
     records_view as record,
     budget_view as budget,
+    category_view as category,
 )
 
 app_name="the_budget"
@@ -23,5 +24,6 @@ urlpatterns = [
     path('record/delete/<int:pk>', record.delete, name='delete_record'),
     path('budget', budget.index, name='budget'),
     path('budget/set/<int:pk>', budget.create, name='create_budget'),
+    path('categories', category.index, name='category'),
 
 ]
