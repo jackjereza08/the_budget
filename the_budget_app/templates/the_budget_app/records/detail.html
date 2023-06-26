@@ -1,0 +1,16 @@
+{% extends '../base.html' %}
+
+{% block content %}
+
+<div class="record">
+    <span class="date">{{ record.date_created }}</span>
+    <span class="category">{{ record.category.category_type }}</span>
+    <h1 class="amount">{{ record.amount|floatformat:"2g" }}</h1>
+    <span class="category-name">{{ record.category.category_name }}</span>
+    <span class="account">{{ record.account.account_name }}</span>
+    <div class="note">
+        {{ record.note }}
+    </div>
+</div>
+
+{% endblock content %}

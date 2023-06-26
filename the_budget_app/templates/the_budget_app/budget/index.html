@@ -1,0 +1,31 @@
+{% extends '../base.html' %}
+{% load my_temp %}
+
+{% block content %}
+
+<div class="container-lg">
+    {% if budgets %}
+    <h1>Budget set for this month</h1>
+        {% for budget, total_expense in budgets %}
+            <div>{{ budget.category.category_name }} ({{ budget.budget_limit|floatformat:"2g" }})</div>
+            {% if total_expense < 0 %}
+            <div>Over {{ total_expense|abs|floatformat:"2g" }} spent on your budget</div>
+            {% else %}
+            <div>{{ total_expense|floatformat:"2g" }} left on your budget</div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        No budgets set for this month.
+    {% endif %}
+
+    {% if categories %}
+    <h3>Set budget for this categories</h3>
+    <ul>
+        {% for category in categories %}
+            <li><a href="{% url 'the_budget:create_budget' category.pk %}">{{ category.category_name }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+
+{% endblock content %}

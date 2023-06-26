@@ -1,0 +1,159 @@
+{% extends '../base.html' %}
+
+{% block content %}
+
+<div class="container-lg justify-content-center mt-4">
+    <div class="card m-auto col-sm-5 shadow border-0">
+        <div class="card-header d-flex justify-content-center justify-content-evenly nav nav-fill">
+            <a class="nav-item btn btn-outline-success" role="button" href="{% url 'the_budget:new_income' %}">Income</a>
+            <a class="nav-item btn btn-outline-danger" role="button" href="{% url 'the_budget:new_expense' %}">Expense</a>
+            <a class="nav-item btn btn-outline-primary" role="button" href="{% url 'the_budget:new_transfer' %}">Transfer</a>
+        </div>
+        <div class="card-body">
+            
+            {% if income_form %}
+            <h3>Income</h3>
+            <hr>
+            <form action="{% url 'the_budget:new_income' %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-sm-6">
+                        {{ income_form.account.label_tag }}
+                        {{ income_form.account }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ income_form.category.label_tag }}
+                        {{ income_form.category }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 d-flex justify-content-center align-items-center">
+                        {% if auto_split_disabled != True %}
+                        <div class="form-check">
+                            {{ income_form.auto_split }}
+                            {{ income_form.auto_split.label_tag }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col">
+                        {{ income_form.amount.label_tag }}
+                        {{ income_form.amount }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ income_form.note.label_tag }}
+                        {{ income_form.note }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ income_form.date.label_tag }}
+                        {{ income_form.date }}
+                    </div>
+                    <div class="col">
+                        {{ income_form.time.label_tag }}
+                        {{ income_form.time }}
+                    </div>
+                </div>
+                <hr>
+                <div class="d-grid mx-auto">
+                    <input type="submit" value="Save" class="btn btn-primary">
+                </div>
+            </form>
+            {% endif %}
+            
+            {% if expense_form %}
+            <h3>Expense</h3>
+            <hr>
+            <form action="{% url 'the_budget:new_expense' %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-sm-6">
+                        {{ expense_form.account.label_tag }}
+                        {{ expense_form.account }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ expense_form.category.label_tag }}
+                        {{ expense_form.category }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4"></div>
+                    <div class="col">
+                        {{ expense_form.amount.label_tag }}
+                        {{ expense_form.amount }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ expense_form.note.label_tag }}
+                        {{ expense_form.note }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ expense_form.date.label_tag }}
+                        {{ expense_form.date }}
+                    </div>
+                    <div class="col">
+                        {{ expense_form.time.label_tag }}
+                        {{ expense_form.time }}
+                    </div>
+                </div>
+                <hr>
+                <div class="d-grid mx-auto">
+                    <input type="submit" value="Save" class="btn btn-primary">
+                </div>
+            </form>
+            {% endif %}
+            
+            {% if transfer_form %}
+            <h3>Transfer</h3>
+            <hr>
+            <form action="{% url 'the_budget:new_transfer' %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-sm-6">
+                        {{ transfer_form.account.label_tag }}
+                        {{ transfer_form.account }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ transfer_form.to_account.label_tag }}
+                        {{ transfer_form.to_account }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4"></div>
+                    <div class="col">
+                        {{ transfer_form.amount.label_tag }}
+                        {{ transfer_form.amount }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ transfer_form.note.label_tag }}
+                        {{ transfer_form.note }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ transfer_form.date.label_tag }}
+                        {{ transfer_form.date }}
+                    </div>
+                    <div class="col">
+                        {{ transfer_form.time.label_tag }}
+                        {{ transfer_form.time }}
+                    </div>
+                </div>
+                <hr>
+                <div class="d-grid mx-auto">
+                    <input type="submit" value="Save" class="btn btn-primary">
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

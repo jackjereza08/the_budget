@@ -1,0 +1,64 @@
+{% extends '../base.html' %}
+
+
+{% block content %}
+
+<div class="container-lg mt-4">
+    <h1 class="text-center">Records</h1>
+    <div class="row justify-content-center">
+        <table class="table table-hover table-sm" style="max-width: 75%;">
+            <tbody>
+                {% if records %}
+                    {% regroup records by date_created|date:"F j" as records %}
+                    {% for date_created in records %}
+                    <tr>
+                        <th colspan="2">{{ date_created.grouper }}</th>
+                    </tr>
+                        {% for record in date_created.list %}
+                        <tr>
+                            <td>
+                                <a role="button" type="button" class="btn d-flex align-items-center row" data-bs-toggle="modal" data-bs-target="#modal{{ record.pk }}">
+                                    <p class="m-0 col text-start">{{ record.category.category_name }}</p>
+                                    <p class="m-0 col">{{ record.account.account_name }}</p>
+                                    <p class="m-0 col">{{ record.amount|floatformat:"2g" }}</p>
+                                </a>
+                            </td>
+                            <td>
+                                <form class="my-1 d-flex justify-content-end" action="{% url 'the_budget:delete_record' record.pk %}" method="post">
+                                    {% csrf_token %}
+                                    <input class="btn btn-outline-danger btn-sm" type="submit" value="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                        <div class="modal fade" id="modal{{ record.pk }}" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content bg-{%if record.category.category_type == 'expense'%}danger{%elif record.category.category_type == 'transfer'%}primary{%else%}success{%endif%} text-white">
+                                    <div class="modal-header">
+                                        <button type="button" class="btn-close .d-sm-none .d-md-block" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body d-flex flex-column align-items-center">
+                                        <p>{{ record.date_created }}</p>
+                                        <p class="mb-0">{{ record.category.category_type|capfirst }}</p>
+                                        <h1 class="modal-title" id="modalTitleId">{{ record.amount|floatformat:"2g" }}</h1>
+                                        <div class="row">
+                                            <h4 class="col category-name">{{ record.category.category_name }}</>
+                                            <h4 class="col account">{{ record.account.account_name }}</h4>
+                                        </div>
+                                        <p>{{ record.note }}</p>    
+                                    </div>
+                                    <div class="modal-footer">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% endfor %}
+                {% else %}
+                No data
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock content %}

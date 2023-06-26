@@ -1,0 +1,61 @@
+{% extends '../base.html' %}
+
+{% block content %}
+
+<div class="container-lg justify-content-center mt-4">
+    <div class="card m-auto col-sm-5 shadow border-0">
+        <div class="card-header">
+            <h3>Edit Account</h3>
+        </div>
+        <div class="card-body">
+            <form action="{% url 'the_budget:update_account' account_id %}" method="post">
+                {% csrf_token %}
+                    {{ form.account_name.label_tag }}
+                    {{ form.account_name }}
+                    <small class="text-danger">
+                        {{ form.account_name.errors|striptags }}
+                    </small>
+                    {{ form.initial_amount.label_tag }}
+                    {{ form.initial_amount }}
+                    <small class="text-danger">
+                        {{ form.initial_amount.errors|striptags }}
+                    </small>
+                    {% if is_split_disabled != True %}
+                    {{ form.splitting_percent.label_tag }}
+                    {{ form.splitting_percent }}
+                    <small class="text-danger">
+                        {{ form.splitting_percent.errors|striptags }}
+                    </small>
+                    {% else %}
+                    {% endif %}
+                    <hr>
+                <div class="d-grid mx-auto">
+                    <input type="submit" value="Save" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+        <div class="card-body">
+            <form action="{% url 'the_budget:delete_account' account_id %}" method="post">
+                <hr>
+                <h5 class="text-danger">Danger Zone</h5>
+                {% csrf_token %}
+                {% if accounts %}
+                <div class="d-flex align-items-center">
+                    <div class="form-check col">
+                        <input class="form-check-input" type="checkbox" name="transfer" id="transfer">
+                        <label class="form-check-label" for="transfer">Transfer the account to</label> 
+                    </div>
+                    <select class="form-select col" name="transfer_to_account" id="transfer_to_account">
+                        {% for account in accounts %}
+                        <option value="{{ account.id }}">{{ account.account_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endif %}
+                <input class="btn btn-danger mt-4" type="submit" value="Delete Account">
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

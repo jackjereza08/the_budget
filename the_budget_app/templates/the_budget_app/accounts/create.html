@@ -1,0 +1,41 @@
+{% extends '../base.html' %}
+
+{% block content %}
+
+<div class="container-lg justify-content-center mt-4">
+    <div class="card m-auto col-sm-5 shadow border-0">
+        <div class="card-header">
+            <h3>Create New Account</h3>
+        </div>
+        <div class="card-body">
+            <form action="{% url 'the_budget:add_account' %}" method="post">
+                {% csrf_token %}
+                    {{ form.account_name.label_tag }}
+                    {{ form.account_name }}
+                    <small class="text-danger">
+                        {{ form.account_name.errors|striptags }}
+                    </small>
+                    {{ form.initial_amount.label_tag }}
+                    {{ form.initial_amount }}
+                    <small class="text-danger">
+                        {{ form.initial_amount.errors|striptags }}
+                    </small>
+                    {% if is_split_disabled != True %}
+                    {{ form.splitting_percent.label_tag }}
+                    {{ form.splitting_percent }}
+                    <small class="text-danger">
+                        {{ form.splitting_percent.errors|striptags }}
+                    </small>
+                    {% else %}
+                    {% endif %}
+                    <hr>
+                <div class="d-grid mx-auto">
+                    <input type="submit" value="Save" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
