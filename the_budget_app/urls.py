@@ -25,5 +25,6 @@ urlpatterns = [
     path('budget', budget.index, name='budget'),
     path('budget/set/<int:pk>', budget.create, name='create_budget'),
     path('categories', category.index, name='category'),
+    path('categories/create', category.create, name='add_category'),
 
 ]
