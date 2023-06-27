@@ -16,7 +16,14 @@
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
                         {% for income in incomes %}
-                        <li class="list-group-item">{{ income.category_name }}</li>
+                        <li class="list-group-item">
+                            {{ income.category_name }} 
+                            <span class="float-end">
+                                <a href="{% url 'the_budget:edit_category' income.pk %}" class="link-secondary">
+                                    Edit
+                                </a>
+                            </span>
+                        </li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -30,7 +37,14 @@
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
                         {% for expense in expenses %}
-                        <li class="list-group-item">{{ expense.category_name }}</li>
+                        <li class="list-group-item">
+                            {{ expense.category_name }} 
+                            <span class="float-end">
+                                <a href="{% url 'the_budget:edit_category' expense.pk %}" class="link-secondary">
+                                    Edit
+                                </a>
+                            </span>
+                        </li>
                         {% endfor %}
                     </ul>
                 </div>
