@@ -1,6 +1,7 @@
 import datetime
 
 from django import forms
+from django.core.exceptions import ValidationError
 from .models import Account, Category
 
 
@@ -210,6 +211,17 @@ class TransferForm(NewRecordForm):
         init_fields(self, 'transfer')
 
     category = None
+
+    def clean(self):
+        super().clean()
+        from_account = self.cleaned_data.get("account")
+        to_account = self.cleaned_data.get("to_account")
+        
+        if from_account == to_account:
+            msg = ValidationError(
+                "Accounts are the same. Please choose other account."
+            )
+            self.add_error('to_account', msg)
 
 
 class BudgetForm(forms.Form):
