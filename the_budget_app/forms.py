@@ -88,7 +88,7 @@ class NewRecordForm(forms.Form):
 
     amount = forms.DecimalField(
         label='Amount',
-        min_value=0,
+        min_value=0.01,
         max_digits=11,
         decimal_places=2,
         label_suffix='',
