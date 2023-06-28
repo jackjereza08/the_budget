@@ -26,6 +26,14 @@
                 </div>
             </form>
         </div>
+        <div class="card-body">
+            <form action="{% url 'the_budget:delete_category' category_id %}" method="post">
+                <hr>
+                <h5 class="text-danger">Danger Zone</h5>
+                {% csrf_token %}
+                <input class="btn btn-danger mt-4" type="submit" value="Delete Account">
+            </form>
+        </div>
     </div>
 </div>
 

@@ -90,3 +90,13 @@ def edit(request, pk):
         else:
             context.update({'error':'ValidationError'})
             return render(request, CATEGORY_EDIT, context)
+
+
+@transaction.atomic
+def delete(request, pk):
+    if request.method == 'POST':
+        category = get_object_or_404(Category, pk=pk)
+        category.delete()
+
+        messages.success(request, 'Deleted Successfully!')
+        return redirect(reverse('the_budget:category'))
