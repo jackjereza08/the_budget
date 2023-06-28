@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
 from django.db import transaction
+from django.http import Http404
 
 from ..models import Category
 from ..forms import CategoryForm
@@ -57,6 +58,8 @@ def create(request):
 
 def edit(request, pk):
     category = get_object_or_404(Category, pk=pk)
+    if category.editable == False:
+        raise Http404("Category does not exist")
     if request.method == 'GET':
         form = CategoryForm(initial={
             'category_type': category.category_type,

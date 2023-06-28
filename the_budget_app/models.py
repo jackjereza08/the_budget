@@ -55,10 +55,6 @@ class Category(models.Model):
     def get_transfer():
         return Category.objects.filter(category_type='transfer').get()
 
-    def is_editable(self):
-        category = Category.objects.get(pk=self.pk)
-        return category.editable
-
     def expenses():
         return Category.objects.filter(category_type='expense')
 
@@ -66,15 +62,10 @@ class Category(models.Model):
         return Category.objects.filter(category_type='income', editable=True)
 
     def save(self, *args, **kwargs):
-        # Get the original data of the object's editable.
-        if self.DoesNotExist:
+        if self.editable == True:
             super().save( *args, **kwargs)
         else:
-            category = Category.objects.get(pk=self.pk)
-            if category.editable == True:
-                super().save( *args, **kwargs)
-            else:
-                raise ValidationError('CANNOT edit this data. Sorry.')
+            raise ValidationError('Permission Denied')
 
 
 class Budget(models.Model):
