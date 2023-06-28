@@ -3,10 +3,10 @@
 {% block content %}
 
 <div class="container-lg justify-content-center mt-4">
-    <div class="card m-auto col-sm-5 shadow border-0">
+    <div class="card m-auto col-md-5 shadow border-0">
         <div class="card-header d-flex justify-content-center justify-content-evenly nav nav-fill">
             <a class="nav-item btn btn-outline-success" role="button" href="{% url 'the_budget:new_income' %}">Income</a>
-            <a class="nav-item btn btn-outline-danger" role="button" href="{% url 'the_budget:new_expense' %}">Expense</a>
+            <a class="nav-item btn btn-outline-danger mx-3" role="button" href="{% url 'the_budget:new_expense' %}">Expense</a>
             <a class="nav-item btn btn-outline-primary" role="button" href="{% url 'the_budget:new_transfer' %}">Transfer</a>
         </div>
         <div class="card-body">
@@ -20,10 +20,16 @@
                     <div class="col-sm-6">
                         {{ income_form.account.label_tag }}
                         {{ income_form.account }}
+                        <small class="text-danger">
+                            {{ income_form.account.errors|striptags }}
+                        </small>
                     </div>
                     <div class="col-sm-6">
                         {{ income_form.category.label_tag }}
                         {{ income_form.category }}
+                        <small class="text-danger">
+                            {{ income_form.category.errors|striptags }}
+                        </small>
                     </div>
                 </div>
                 <div class="row">
@@ -32,28 +38,43 @@
                         <div class="form-check">
                             {{ income_form.auto_split }}
                             {{ income_form.auto_split.label_tag }}
+                            <small class="text-danger">
+                                {{ income_form.auto_split.errors|striptags }}
+                            </small>
                         </div>
                         {% endif %}
                     </div>
                     <div class="col">
                         {{ income_form.amount.label_tag }}
                         {{ income_form.amount }}
+                        <small class="text-danger">
+                            {{ income_form.amount.errors|striptags }}
+                        </small>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         {{ income_form.note.label_tag }}
                         {{ income_form.note }}
+                        <small class="text-danger">
+                            {{ income_form.note.errors|striptags }}
+                        </small>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         {{ income_form.date.label_tag }}
                         {{ income_form.date }}
+                        <small class="text-danger">
+                            {{ income_form.date.errors|striptags }}
+                        </small>
                     </div>
                     <div class="col">
                         {{ income_form.time.label_tag }}
                         {{ income_form.time }}
+                        <small class="text-danger">
+                            {{ income_form.time.errors|striptags }}
+                        </small>
                     </div>
                 </div>
                 <hr>
@@ -72,10 +93,16 @@
                     <div class="col-sm-6">
                         {{ expense_form.account.label_tag }}
                         {{ expense_form.account }}
+                        <small class="text-danger">
+                            {{ expense_form.account.errors|striptags }}
+                        </small>
                     </div>
                     <div class="col-sm-6">
                         {{ expense_form.category.label_tag }}
                         {{ expense_form.category }}
+                        <small class="text-danger">
+                            {{ expense_form.category.errors|striptags }}
+                        </small>
                     </div>
                 </div>
                 <div class="row">
@@ -83,22 +110,34 @@
                     <div class="col">
                         {{ expense_form.amount.label_tag }}
                         {{ expense_form.amount }}
+                        <small class="text-danger">
+                            {{ expense_form.amount.errors|striptags }}
+                        </small>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         {{ expense_form.note.label_tag }}
                         {{ expense_form.note }}
+                        <small class="text-danger">
+                            {{ expense_form.note.errors|striptags }}
+                        </small>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         {{ expense_form.date.label_tag }}
                         {{ expense_form.date }}
+                        <small class="text-danger">
+                            {{ expense_form.date.errors|striptags }}
+                        </small>
                     </div>
                     <div class="col">
                         {{ expense_form.time.label_tag }}
                         {{ expense_form.time }}
+                        <small class="text-danger">
+                            {{ expense_form.time.errors|striptags }}
+                        </small>
                     </div>
                 </div>
                 <hr>
@@ -117,33 +156,51 @@
                     <div class="col-sm-6">
                         {{ transfer_form.account.label_tag }}
                         {{ transfer_form.account }}
+                        <small class="text-danger">
+                            {{ transfer_form.account.errors|striptags }}
+                        </small>
                     </div>
                     <div class="col-sm-6">
                         {{ transfer_form.to_account.label_tag }}
                         {{ transfer_form.to_account }}
                     </div>
+                    <small class="text-danger">
+                        {{ transfer_form.to_account.errors|striptags }}
+                    </small>
                 </div>
                 <div class="row">
                     <div class="col-4"></div>
                     <div class="col">
                         {{ transfer_form.amount.label_tag }}
                         {{ transfer_form.amount }}
+                        <small class="text-danger">
+                            {{ transfer_form.amount.errors|striptags }}
+                        </small>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         {{ transfer_form.note.label_tag }}
                         {{ transfer_form.note }}
+                        <small class="text-danger">
+                            {{ transfer_form.note.errors|striptags }}
+                        </small>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         {{ transfer_form.date.label_tag }}
                         {{ transfer_form.date }}
+                        <small class="text-danger">
+                            {{ transfer_form.date.errors|striptags }}
+                        </small>
                     </div>
                     <div class="col">
                         {{ transfer_form.time.label_tag }}
                         {{ transfer_form.time }}
+                        <small class="text-danger">
+                            {{ transfer_form.time.errors|striptags }}
+                        </small>
                     </div>
                 </div>
                 <hr>

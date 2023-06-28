@@ -1,6 +1,7 @@
 import datetime
 
 from django import forms
+from django.core.exceptions import ValidationError
 from .models import Account, Category
 
 
@@ -87,7 +88,7 @@ class NewRecordForm(forms.Form):
 
     amount = forms.DecimalField(
         label='Amount',
-        min_value=0,
+        min_value=0.01,
         max_digits=11,
         decimal_places=2,
         label_suffix='',
@@ -143,11 +144,20 @@ def init_fields(self, category: str):
             widget=forms.Select(attrs={'class':'form-select'})
         )
 
-    if category in ('income', 'expense'):
+    if category == 'income':
         self.fields['category'] = forms.ChoiceField(
             choices = [
                 (category.pk, category.category_name)
-                for category in Category.list_of(category)
+                for category in Category.incomes()
+            ],
+            label_suffix='',
+            widget=forms.Select(attrs={'class':'form-select'})
+        )
+    elif category == 'expense':
+        self.fields['category'] = forms.ChoiceField(
+            choices = [
+                (category.pk, category.category_name)
+                for category in Category.expenses()
             ],
             label_suffix='',
             widget=forms.Select(attrs={'class':'form-select'})
@@ -201,6 +211,17 @@ class TransferForm(NewRecordForm):
         init_fields(self, 'transfer')
 
     category = None
+
+    def clean(self):
+        super().clean()
+        from_account = self.cleaned_data.get("account")
+        to_account = self.cleaned_data.get("to_account")
+        
+        if from_account == to_account:
+            msg = ValidationError(
+                "Accounts are the same. Please choose other account."
+            )
+            self.add_error('to_account', msg)
 
 
 class BudgetForm(forms.Form):
