@@ -33,6 +33,7 @@ def income(request):
         return render(request, RECORD_INDEX, context)
 
     if request.method == 'POST':
+        split_sum = Account.get_sum_of_splitting_percent()
         form = IncomeForm(request.POST)
         context = {
             'income_form': form,
@@ -101,10 +102,10 @@ def income(request):
             context.update({'success': "Income Added Successfully!"})
             messages.success(request, context['success'])
         else:
+            if split_sum != 100:
+                context.update({'auto_split_disabled': True})
             context.update({'error': "ValidationError"})
             return render(request, RECORD_INDEX, context)
-
-
         return redirect(reverse('the_budget:record'))
 
 
