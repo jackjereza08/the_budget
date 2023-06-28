@@ -143,11 +143,20 @@ def init_fields(self, category: str):
             widget=forms.Select(attrs={'class':'form-select'})
         )
 
-    if category in ('income', 'expense'):
+    if category == 'income':
         self.fields['category'] = forms.ChoiceField(
             choices = [
                 (category.pk, category.category_name)
-                for category in Category.list_of(category)
+                for category in Category.incomes()
+            ],
+            label_suffix='',
+            widget=forms.Select(attrs={'class':'form-select'})
+        )
+    elif category == 'expense':
+        self.fields['category'] = forms.ChoiceField(
+            choices = [
+                (category.pk, category.category_name)
+                for category in Category.expenses()
             ],
             label_suffix='',
             widget=forms.Select(attrs={'class':'form-select'})
