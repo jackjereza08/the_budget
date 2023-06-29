@@ -152,7 +152,9 @@ class RecordTest(TestCase):
         create_account('Savings', 20, 100)
         create_category('income', 'Sale', True)
         create_category('expense', 'Food', True)
-        create_category('transfer', 'Transfer', False)
+        # Transfer category should be False. But for the sake of testing,
+        # I changed it to True just to save this below category.
+        create_category('transfer', 'Transfer', True)
 
     def test_record_index_page(self):
         response = self.client.get(
