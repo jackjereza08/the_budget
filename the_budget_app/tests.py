@@ -4,7 +4,9 @@ from datetime import datetime
 from django.utils import timezone
 
 from .models import Account, Category, Ledger
-from .forms import IncomeForm
+from .forms import (
+    IncomeForm, ExpenseForm, TransferForm, BudgetForm, CategoryForm
+    )
 
 
 # Accounts
@@ -441,7 +443,7 @@ class FormTest(TestCase):
     """
     def setUp(self):
         create_account('Needs', 50, 0)
-        create_account('Wants', 30, 0)
+        create_account('Wants', 30, 100)
         create_account('Savings', 20, 0)
         create_category('income', 'Sale', True)
         create_category('expense', 'Food', True)
@@ -474,18 +476,145 @@ class FormTest(TestCase):
         self.assertTrue(form.is_bound)
         self.assertFalse(form.is_valid())
 
+    def test_expense_form(self):
+        """Test the ExpenseForm"""
+        data = {
+            'account': 2,
+            'category': 2,
+            'amount': 10.99,
+            'note': '',
+            'date': '2023-5-15',
+            'time': '15:15:00',
+        }
+        form = ExpenseForm(data)
+
+        self.assertTrue(form.is_bound)
+        self.assertTrue(form.is_valid())
+
+        data = {
+            'account': 2,
+            'category': 1,
+            'amount': 10.9943,
+            'note': '',
+            'date': '2023-5',
+            'time': '1534:00',
+        }
+        form = ExpenseForm(data)
+
+        self.assertTrue(form.is_bound)
+        self.assertFalse(form.is_valid())
+
+    def test_transfer_form(self):
+        """Test the TransferForm"""
+        data = {
+            'account': 2,
+            'to_account': 1,
+            'amount': 10.99,
+            'note': '',
+            'date': '2023-5-15',
+            'time': '15:15:00',
+        }
+        form = TransferForm(data)
+
+        self.assertTrue(form.is_bound)
+        self.assertTrue(form.is_valid())
+
+        data = {
+            'account': 2,
+            'to_account': 1,
+            'amount': 10.9943,
+            'note': '',
+            'date': '2023-5',
+            'time': '1534:00',
+        }
+        form = TransferForm(data)
+
+        self.assertTrue(form.is_bound)
+        self.assertFalse(form.is_valid())
+
+        data = {
+            'account': 2,
+            'to_account': 2,
+            'amount': 10.99,
+            'note': '',
+            'date': '2023-5-15',
+            'time': '15:15:00',
+        }
+        form = TransferForm(data)
+
+        self.assertTrue(form.is_bound)
+        self.assertFalse(form.is_valid())
+
+    def test_budget_form(self):
+        """Test the BudgetForm"""
+        data1 = {
+            'budget_limit': 100
+        }
+        data2 = {
+            'budget_limit': 0
+        }
+        data3 = {
+            'budget_limit': 123456789.102345
+        }
+
+        form1 = BudgetForm(data1)
+        form2 = BudgetForm(data2)
+        form3 = BudgetForm(data3)
+
+        self.assertTrue(form1.is_valid())
+        self.assertFalse(form2.is_valid())
+        self.assertFalse(form3.is_valid())
+
+    def test_category_form(self):
+        data = [
+            { #Valid
+                'category_type': 'income',
+                'category_name': 'Sale',
+            },
+            { #Valid
+                'category_type': 'expense',
+                'category_name': 'Load',
+            },
+            { #Invalid
+                'category_type': 'incme',
+                'category_name': 'Sale',
+            },
+            { #Invalid
+                'category_type': '',
+                'category_name': 'Sale',
+            },
+            { #Invalid
+                'category_type': 'income',
+                'category_name': '',
+            },
+            { #Invalid
+                'category_type': '',
+                'category_name': '',
+            },
+        ]
+        for c in range(len(data[:2])):
+            form = CategoryForm(data[c])
+            self.assertTrue(form.is_valid())
+
+        for c in range(2, len(data[2:])):
+            form = CategoryForm(data[c])
+            self.assertFalse(form.is_valid())
+
 
 class ModelTest(TestCase):
     """
     Test the models.
     """
     def test_category_if_transfer_and_from_deleted_account_editable(self):
+        pass
         """
         Check the custom save function to make sure the `transfer` and
         `from deleted account` data will not change.
         """
         # Code below passed the test as creating a category that has
         # editable set to False.
+        # The category `from deleted account` and `Transfer` will be in
+        # system's default data in the database.
         
         # create_category('transfer','Transfer', False)
 
