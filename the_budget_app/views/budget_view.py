@@ -22,29 +22,52 @@ BUDGET_CREATE = TEMPLATE_BUDGET + 'create.html'
 
 def index(request):
     today = datetime.today()
-    budget = Budget.objects.select_related('category').filter(
+    # The `budget` variable will strore all category with budget for the
+    # month of today.month(). Has the budget_limit.
+    budgets = Budget.objects.select_related('category').filter(
         month=today.month, year=today.year
     )
+    # Get all the expenses for this month.
     expenses = Ledger.objects.values('category').annotate(
         total_expense=Sum('amount')
     ).filter(date_created__month=today.month)
-    with_budget_set = expenses.filter(category__budget__in=budget)
-    budget_left = []
-    for b, j in zip(budget, with_budget_set):
-        whats_left = b.budget_limit - j['total_expense']
-        budget_left.append(whats_left)
-    
-    budgets_and_expense = zip(budget, budget_left)
-
+    # Only get the expense whose category has budget set.
+    with_budget_set = expenses.filter(category__budget__in=budgets)
+    # Loop through the budgets.
+    budget_info_list = []
+    for with_budget in with_budget_set:
+        for budget in budgets:
+            if with_budget.get("category") == budget.category.pk:
+                budget_info_list.append(
+                    {
+                        'category_id': budget.category.pk,
+                        'category_name': budget.category.category_name,
+                        'budget_limit': budget.budget_limit,
+                        'spent': with_budget.get("total_expense"),
+                        'remaining': budget.budget_limit
+                                    - with_budget.get("total_expense"),
+                    }
+                )
+            else:
+                budget_info_list.append(
+                    {
+                        'category_id': budget.category.pk,
+                        'category_name': budget.category.category_name,
+                        'budget_limit': budget.budget_limit,
+                        'spent': 0,
+                        'remaining': 0,
+                    }
+                )
+    print(with_budget_set)
+    print(budget_info_list)
     context = {
-        'budgets': budgets_and_expense,
-        'with_budget_set': with_budget_set,
+        'budget_info_list': budget_info_list,
     }
-    if budget:
+    if budgets:
         categories = Category.objects.filter(
             category_type='expense'
         )
-        categories = categories.exclude(budget__in=budget)
+        categories = categories.exclude(budget__in=budgets)
         context.update({
             'categories': categories,
         })

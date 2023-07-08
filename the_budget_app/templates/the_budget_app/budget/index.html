@@ -4,14 +4,14 @@
 {% block content %}
 
 <div class="container-lg">
-    {% if budgets %}
+    {% if budget_info_list %}
     <h1>Budget set for this month</h1>
-        {% for budget, total_expense in budgets %}
-            <div>{{ budget.category.category_name }} ({{ budget.budget_limit|floatformat:"2g" }})</div>
-            {% if total_expense < 0 %}
-            <div>Over {{ total_expense|abs|floatformat:"2g" }} spent on your budget</div>
+        {% for budget in budget_info_list %}
+            <div>{{ budget.category_name }} ({{ budget.budget_limit|floatformat:"2g" }})</div>
+            {% if budget.total_expense < 0 %}
+            <div>Over {{ budget.remaining|abs|floatformat:"2g" }} spent on your budget</div>
             {% else %}
-            <div>{{ total_expense|floatformat:"2g" }} left on your budget</div>
+            <div>{{ budget.remaining|floatformat:"2g" }} left on your budget</div>
             {% endif %}
         {% endfor %}
     {% else %}
