@@ -1,0 +1,28 @@
+{% extends '../base.html' %}
+
+{% block content %}
+
+<div class="container-lg justify-content-center mt-4">
+    <div class="card m-auto col-sm-5 shadow border-0">
+        <div class="card-header">
+            <h3>Set budget for: {{ category.category_name }}</h3>
+            <h4>For the month of: {{ this_month }}</h4>
+        </div>
+        <div class="card-body">
+            <form action="{% url 'the_budget:edit_budget' budget_id %}" method="post">
+                {% csrf_token %}
+                {{ form.budget_limit.label_tag }}
+                {{ form.budget_limit }}
+                <small class="text-danger">
+                    {{ form.budget_limit.errors|striptags }}
+                </small>
+                <hr>
+                <div class="d-grid mx-auto">
+                    <input type="submit" value="Save" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
