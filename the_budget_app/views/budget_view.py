@@ -19,6 +19,8 @@ TEMPLATE_BUDGET = 'the_budget_app/budget/'
 BUDGET_INDEX = TEMPLATE_BUDGET + 'index.html'
 BUDGET_CREATE = TEMPLATE_BUDGET + 'create.html'
 
+THIS_MONTH = datetime.today().strftime("%B %Y")
+
 
 def index(request):
     today = datetime.today()
@@ -65,6 +67,7 @@ def index(request):
 
     context = {
         'budget_info_list': budget_info_list,
+        'this_month': THIS_MONTH,
     }
     if budgets:
         categories = Category.objects.filter(
@@ -91,11 +94,10 @@ def create(request, pk):
                 pk=pk, category_type='expense'
             ).get()
             form = BudgetForm()
-            this_month = datetime.today().strftime("%B %Y")
             context = {
                 'category': category,
                 'form': form,
-                'this_month': this_month,
+                'this_month': THIS_MONTH,
             }
             return render(request, BUDGET_CREATE, context)
         except ObjectDoesNotExist:
@@ -111,7 +113,7 @@ def create(request, pk):
             context = {
                 'category': category,
                 'form': form,
-                'this_month': this_month.strftime("%B %Y"),
+                'this_month': THIS_MONTH,
             }
 
             if form.is_valid():
