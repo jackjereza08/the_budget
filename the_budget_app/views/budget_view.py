@@ -42,6 +42,7 @@ def index(request):
             if with_budget.get("category") == budget.category.pk:
                 budget_info_list.append(
                     {
+                        'budget_id': budget.pk,
                         'category_id': budget.category.pk,
                         'category_name': budget.category.category_name,
                         'budget_limit': budget.budget_limit,
@@ -56,6 +57,7 @@ def index(request):
         else:
             budget_info_list.append(
                 {
+                    'budget_id': budget.pk,
                     'category_id': budget.category.pk,
                     'category_name': budget.category.category_name,
                     'budget_limit': budget.budget_limit,
@@ -82,7 +84,7 @@ def index(request):
         context.update({
             'categories': categories,
         })
-
+    print(budget_info_list)
     return render(request, BUDGET_INDEX, context)
 
 
@@ -125,6 +127,56 @@ def create(request, pk):
                     year=this_month.year,
                 )
                 messages.success(request, 'Budget Set Successfully!')
+                return redirect(reverse('the_budget:budget'))
+            else:
+                return render(request, BUDGET_CREATE, context)
+        except ObjectDoesNotExist:
+            raise Http404("Category does not exist")
+
+
+@transaction.atomic
+def edit(request, pk):
+    """
+    Edit the current budget set for the selected category.
+    """
+    if request.method == 'GET':
+        try:
+            budget = get_object_or_404(Budget,pk=pk)
+            # category = Category.objects.filter(
+            #     pk=pk, category_type='expense'
+            # ).get()
+            form = BudgetForm(initial={
+                'budget_limit': budget.budget_limit
+            })
+            context = {
+                'budget_id': budget.pk,
+                'category': budget.category,
+                'form': form,
+                'this_month': THIS_MONTH,
+            }
+            return render(request, BUDGET_CREATE, context)
+        except ObjectDoesNotExist:
+            raise Http404("Category does not exist")
+
+    if request.method == 'POST':
+        try:
+            budget = get_object_or_404(Budget,pk=pk)
+            # category = Category.objects.filter(
+            #     pk=pk, category_type='expense'
+            # ).get()
+            form = BudgetForm(request.POST)
+            context = {
+                'category': budget.category,
+                'form': form,
+                'this_month': THIS_MONTH,
+            }
+
+            if form.is_valid():
+                if form.has_changed():
+                    budget_limit = form.cleaned_data['budget_limit']
+                    budget.budget_limit = budget_limit
+                    budget.save()
+                messages.success(request, 'Budget Updated Successfully!')
                 return redirect(reverse('the_budget:budget'))
             else:
                 return render(request, BUDGET_CREATE, context)

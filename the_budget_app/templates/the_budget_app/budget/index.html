@@ -5,26 +5,43 @@
 
 <div class="container-lg">
     {% if budget_info_list %}
-    <h1>Budget set for this month</h1>
-        {% for budget in budget_info_list %}
-            <div>{{ budget.category_name }} ({{ budget.budget_limit|floatformat:"2g" }})</div>
-            {% if budget.total_expense < 0 %}
-            <div>Over {{ budget.remaining|abs|floatformat:"2g" }} spent on your budget</div>
-            {% else %}
-            <div>{{ budget.remaining|floatformat:"2g" }} left on your budget</div>
-            {% endif %}
+    <h3>Budget set for this month, {{ this_month }}</h3>
+    {% for budget in budget_info_list %}
+        <div class="row">
+            <div class="col-md-4">
+                <p>
+                    {{ budget.category_name }} ({{ budget.budget_limit|floatformat:"2g" }})
+                    <a href="{% url 'the_budget:edit_budget' budget.budget_id %}" class="text-secondary">Edit Budget</a>
+                </p>
+                {% if budget.remaining < 0 %}
+                <p>Over {{ budget.remaining|abs|floatformat:"2g" }} spent on your budget</h>
+                {% else %}
+                <p>{{ budget.remaining|floatformat:"2g" }} left on your budget</p>
+                {% endif %}
+            </div>
+            <div class="col-md-8">
+                <div class="progress" style="height: 1.5rem;">
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: {{ budget.pb_width }}%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                        <span style="font-size: 1.2rem;">{{ budget.spent|abs|floatformat:"2g" }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
         {% endfor %}
     {% else %}
-        No budgets set for this month.
+        No budgets set for this month. {{ this_month }}.
     {% endif %}
 
     {% if categories %}
     <h3>Set budget for this categories</h3>
-    <ul>
+    <div class="d-flex flex-wrap g-2">
         {% for category in categories %}
-            <li><a href="{% url 'the_budget:create_budget' category.pk %}">{{ category.category_name }}</a></li>
+        <div class="m-2">
+            <a href="{% url 'the_budget:create_budget' category.pk %}" class="btn btn-outline-primary">{{ category.category_name }}</a>
+        </div>
         {% endfor %}
-    </ul>
+    </div>
     {% endif %}
 </div>
 
