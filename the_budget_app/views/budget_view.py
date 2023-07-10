@@ -35,8 +35,8 @@ def index(request):
     with_budget_set = expenses.filter(category__budget__in=budgets)
     # Loop through the budgets.
     budget_info_list = []
-    for with_budget in with_budget_set:
-        for budget in budgets:
+    for budget in budgets:
+        for with_budget in with_budget_set:
             if with_budget.get("category") == budget.category.pk:
                 budget_info_list.append(
                     {
@@ -48,18 +48,18 @@ def index(request):
                                     - with_budget.get("total_expense"),
                     }
                 )
-            else:
-                budget_info_list.append(
-                    {
-                        'category_id': budget.category.pk,
-                        'category_name': budget.category.category_name,
-                        'budget_limit': budget.budget_limit,
-                        'spent': 0,
-                        'remaining': 0,
-                    }
-                )
-    print(with_budget_set)
-    print(budget_info_list)
+                break
+        else:
+            budget_info_list.append(
+                {
+                    'category_id': budget.category.pk,
+                    'category_name': budget.category.category_name,
+                    'budget_limit': budget.budget_limit,
+                    'spent': 0,
+                    'remaining': budget.budget_limit,
+                }
+            )
+
     context = {
         'budget_info_list': budget_info_list,
     }
