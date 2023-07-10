@@ -46,6 +46,8 @@ def index(request):
                         'spent': with_budget.get("total_expense"),
                         'remaining': budget.budget_limit
                                     - with_budget.get("total_expense"),
+                        'pb_width': (with_budget.get("total_expense")
+                                    / budget.budget_limit) * 100,
                     }
                 )
                 break
@@ -57,6 +59,7 @@ def index(request):
                     'budget_limit': budget.budget_limit,
                     'spent': 0,
                     'remaining': budget.budget_limit,
+                    'pb_width': 0
                 }
             )
 
