@@ -24,6 +24,7 @@ urlpatterns = [
     path('record/delete/<int:pk>', record.delete, name='delete_record'),
     path('budget', budget.index, name='budget'),
     path('budget/set/<int:pk>', budget.create, name='create_budget'),
+    path('budget/edit/<int:pk>', budget.edit, name='edit_budget'),
     path('categories', category.index, name='category'),
     path('categories/create', category.create, name='add_category'),
     path('categories/edit/<int:pk>', category.edit, name='edit_category'),
