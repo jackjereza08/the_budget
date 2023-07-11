@@ -18,6 +18,7 @@ TEMPLATE_BUDGET = 'the_budget_app/budget/'
 # Template Accounts
 BUDGET_INDEX = TEMPLATE_BUDGET + 'index.html'
 BUDGET_CREATE = TEMPLATE_BUDGET + 'create.html'
+BUDGET_EDIT = TEMPLATE_BUDGET + 'edit.html'
 
 THIS_MONTH = datetime.today().strftime("%B %Y")
 
@@ -84,7 +85,6 @@ def index(request):
         context.update({
             'categories': categories,
         })
-    print(budget_info_list)
     return render(request, BUDGET_INDEX, context)
 
 
@@ -142,9 +142,6 @@ def edit(request, pk):
     if request.method == 'GET':
         try:
             budget = get_object_or_404(Budget,pk=pk)
-            # category = Category.objects.filter(
-            #     pk=pk, category_type='expense'
-            # ).get()
             form = BudgetForm(initial={
                 'budget_limit': budget.budget_limit
             })
@@ -154,16 +151,13 @@ def edit(request, pk):
                 'form': form,
                 'this_month': THIS_MONTH,
             }
-            return render(request, BUDGET_CREATE, context)
+            return render(request, BUDGET_EDIT, context)
         except ObjectDoesNotExist:
             raise Http404("Category does not exist")
 
     if request.method == 'POST':
         try:
             budget = get_object_or_404(Budget,pk=pk)
-            # category = Category.objects.filter(
-            #     pk=pk, category_type='expense'
-            # ).get()
             form = BudgetForm(request.POST)
             context = {
                 'category': budget.category,
@@ -179,6 +173,6 @@ def edit(request, pk):
                 messages.success(request, 'Budget Updated Successfully!')
                 return redirect(reverse('the_budget:budget'))
             else:
-                return render(request, BUDGET_CREATE, context)
+                return render(request, BUDGET_EDIT, context)
         except ObjectDoesNotExist:
             raise Http404("Category does not exist")
